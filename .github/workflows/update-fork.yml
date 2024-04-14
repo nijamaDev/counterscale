@@ -1,0 +1,36 @@
+name: Update Fork
+
+on:
+    schedule:
+        # This runs the workflow automatically every monday at 05:55 AM UTC
+        - cron: "55 5 * * 1"
+
+jobs:
+    update:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+              with:
+                  ref: "main" # Ensures the 'main' branch is checked out
+                  fetch-depth: 0 # Fetches all history for branch comparison
+                  token: ${{ secrets.PERSONAL_ACCESS_TOKEN }} # Uses PAT to authenticate
+
+            - name: Configure Git
+              run: |
+                  git config --global user.email "nijama.dev@gmail.com"
+                  git config --global user.name "nijamaDev"
+
+            - name: Add upstream remote
+              run: |
+                  git remote add upstream https://github.com/benvinegar/counterscale
+                  git fetch upstream
+
+            - name: Rebase with upstream
+              run: |
+                  git checkout main
+                  git rebase upstream/main
+
+            - name: Force push to main
+              run: |
+                  git push origin main --force
