@@ -20,3 +20,4 @@ jobs:
               with:
                   apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
                   workingDirectory: "packages/server"
+                  accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
